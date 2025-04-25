@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar empleado</title>
+</head>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbar}"></th:block>
+
+<h2>Editar datos de ubicación</h2>
+
+<form th:action="@{'/empleados/editar/' + ${empleado.employeeId}}" method="post">
+    <label>ID:</label>
+    <input type="text" th:value="${empleado.employeeId}" readonly><br>
+
+    <label>Nombre:</label>
+    <input type="text" th:value="${empleado.firstName}" readonly><br>
+
+    <label>Apellido:</label>
+    <input type="text" th:value="${empleado.lastName}" readonly><br>
+
+    <label>Puesto:</label>
+    <input type="text" th:value="${empleado.jobTitle}" readonly><br>
+
+    <label>Departamento:</label>
+    <input type="text" th:value="${empleado.departmentName}" readonly><br>
+
+    <label>Ciudad:</label>
+    <input type="text" name="city" th:value="${empleado.city}"><br>
+
+    <label>Código Postal:</label>
+    <input type="text" name="postalCode" th:value="${empleado.postalCode}"><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+</body>
+</html>
