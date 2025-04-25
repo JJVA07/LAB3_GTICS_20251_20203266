@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de empleados</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Navbar fragment -->
+<th:block th:replace="~{fragments/navbar :: navbar}"></th:block>
+
+<h2>Lista de empleados</h2>
+
+<form th:action="@{/empleados}" method="get" style="margin-bottom: 20px;">
+    <label for="filtro">Buscar por:</label>
+    <select name="filtro" id="filtro">
+        <option th:value="'nombre'" th:selected="${filtro == 'nombre'}">Nombre</option>
+        <option th:value="'departamento'" th:selected="${filtro == 'departamento'}">Departamento</option>
+    </select>
+
+    <input type="text" name="valor" placeholder="Ingrese valor" th:value="${valor}">
+
+    <button type="submit">Buscar</button>
+
+    <a th:href="@{/empleados}" style="display: inline-block; padding: 6px 12px; border: 1px solid gray; background-color: white; text-decoration: none; color: black;">Limpiar</a>
+</form>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th># Usuario</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Puesto</th>
+        <th>Departamento</th>
+        <th>Ciudad</th>
+        <th>Código Postal</th>
+        <th>Salario</th>
+        <th>Editar</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="emp : ${empleados}">
+        <td th:text="${emp.employeeId}">ID</td>
+        <td th:text="${emp.firstName}">Nombre</td>
+        <td th:text="${emp.lastName}">Apellido</td>
+        <td th:text="${emp.job_Title}">Puesto</td>
+        <td th:text="${emp.departmentName}">Departamento</td>
+        <td th:text="${emp.city}">Ciudad</td>
+        <td th:text="${emp.postalCode}">Código</td>
+        <td th:text="${emp.salary}">Salario</td>
+        <td><a th:href="@{'/empleados/editar/' + ${emp.employeeId}}">Editar</a></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
