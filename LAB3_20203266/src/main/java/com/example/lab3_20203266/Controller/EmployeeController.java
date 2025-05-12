@@ -5,8 +5,10 @@ import com.example.lab3_20203266.Dto.EmployeeListDTO;
 import com.example.lab3_20203266.Entity.Employee;
 import com.example.lab3_20203266.Entity.Location;
 import com.example.lab3_20203266.Repository.EmployeeRepository;
+import com.example.lab3_20203266.Repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,9 @@ public class EmployeeController {
 
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    LocationRepository locationRepository;
+
 
     @GetMapping
     public String listarEmpleados(@RequestParam(required = false) String filtro,
@@ -48,18 +53,20 @@ public class EmployeeController {
     }
 
     @PostMapping("/editar/{id}")
+    @Transactional
     public String guardarCambios(@PathVariable Long id,
                                  @RequestParam String city,
                                  @RequestParam String postalCode) {
-        // Actualización manual sin save()
         Employee empleado = employeeRepository.findById(id).orElse(null);
         if (empleado != null) {
-            Location loc = empleado.getDepartment().getLocation();
-            loc.setCity(city);
-            loc.setPostalCode(postalCode);
+            Long locationId = empleado.getDepartment().getLocation().getLocationId().longValue();
+            locationRepository.actualizarCiudadYCodigoPostal(city, postalCode, locationId);
         }
         return "redirect:/empleados";
     }
+
+
+
 
 
 

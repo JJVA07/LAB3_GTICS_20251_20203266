@@ -4,8 +4,10 @@ import com.example.lab3_20203266.Dto.EmployeeEditDTO;
 import com.example.lab3_20203266.Dto.EmployeeListDTO;
 import com.example.lab3_20203266.Entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,7 +60,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     JOIN e.job j
     JOIN e.department d
     JOIN d.location l
-""")
+    """)
     List<EmployeeListDTO> findAllProjectedBy();
 
     @Query("""
@@ -74,8 +76,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     JOIN e.department d
     JOIN d.location l
     WHERE e.employeeId = :id
-""")
+    """)
     EmployeeEditDTO getEditData(@Param("id") Long id);
 
-}
+    // 🔧 Nuevo método para actualizar ciudad y código postal
+    @Transactional
+    @Modifying
+    @Query("""
+    UPDATE Location l SET l.city = :city, l.postalCode = :postalCode
+    WHERE l.locationId = :locationId
+""")
+    void actualizarCiudadYCodigoPostal(@Param("city") String city,
+                                       @Param("postalCode") String postalCode,
+                                       @Param("locationId") Long locationId);
 
+}
