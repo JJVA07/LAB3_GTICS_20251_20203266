@@ -2,6 +2,7 @@ package com.example.lab3_20203266.Controller;
 
 import com.example.lab3_20203266.Dto.EmployeeEditDTO;
 import com.example.lab3_20203266.Dto.EmployeeListDTO;
+import com.example.lab3_20203266.Dto.ReporteSalarioDTO;
 import com.example.lab3_20203266.Entity.Employee;
 import com.example.lab3_20203266.Entity.Location;
 import com.example.lab3_20203266.Repository.EmployeeRepository;
@@ -20,9 +21,9 @@ public class EmployeeController {
 
     @Autowired
     EmployeeRepository employeeRepository;
+
     @Autowired
     LocationRepository locationRepository;
-
 
     @GetMapping
     public String listarEmpleados(@RequestParam(required = false) String filtro,
@@ -65,9 +66,18 @@ public class EmployeeController {
         return "redirect:/empleados";
     }
 
+    @GetMapping("/reporte")
+    public String mostrarReporte(@RequestParam(required = false) String nombre, Model model) {
+        List<ReporteSalarioDTO> reporte;
 
+        if (nombre != null && !nombre.isEmpty()) {
+            reporte = employeeRepository.obtenerReporteFiltradoPorNombre(nombre);
+        } else {
+            reporte = employeeRepository.obtenerReporte();
+        }
 
-
-
-
+        model.addAttribute("reporte", reporte);
+        model.addAttribute("nombre", nombre);
+        return "employee/reporte";
+    }
 }

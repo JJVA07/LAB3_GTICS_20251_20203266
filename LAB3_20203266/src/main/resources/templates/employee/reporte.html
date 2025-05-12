@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reporte de empleados</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<h2>Reporte de empleados</h2>
+
+<form th:action="@{/empleados/reporte}" method="get">
+    <input type="text" name="nombre" th:value="${nombre}" placeholder="Buscar por nombre"/>
+    <button type="submit">Buscar</button>
+    <a th:href="@{/empleados/reporte}">
+        <button type="button">Limpiar</button>
+    </a>
+</form>
+
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Puesto</th>
+        <th>Salario promedio</th>
+        <th>Salario máximo</th>
+        <th>Salario mínimo</th>
+        <th>Empleado con salario más alto</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${reporte}">
+        <td th:text="${r.puesto}"></td>
+        <td th:text="${r.avgSalary}"></td>
+        <td th:text="${r.maxSalary}"></td>
+        <td th:text="${r.minSalary}"></td>
+        <td th:text="${r.nombreTop}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
